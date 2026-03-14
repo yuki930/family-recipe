@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Recipe, RecipeTag } from "@/types/recipe";
+import { Recipe, RecipeTag, SourceRecipe } from "@/types/recipe";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { PhotoUpload } from "@/components/ui/PhotoUpload";
 import { TagSelect } from "@/components/ui/TagSelect";
+import { SourceRecipeForm } from "@/components/recipe/SourceRecipeForm";
 
 interface RecipeFormProps {
   initial?: Partial<Recipe>;
@@ -28,22 +29,18 @@ export function RecipeForm({ initial, onSubmit, onCancel }: RecipeFormProps) {
   );
   const [tags, setTags] = useState<RecipeTag[]>(initial?.tags || []);
   const [episode, setEpisode] = useState(initial?.episode || "");
-  const [sourceUrl, setSourceUrl] = useState(initial?.source?.url || "");
-  const [sourceTitle, setSourceTitle] = useState(
-    initial?.source?.title || ""
+  const [source, setSource] = useState<SourceRecipe | undefined>(
+    initial?.source
   );
-  const [sourceArrangement, setSourceArrangement] = useState(
-    initial?.source?.arrangement || ""
-  );
+
+  const splitLines = (s: string) =>
+    s
+      .split("\n")
+      .map((l) => l.trim())
+      .filter(Boolean);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const splitLines = (s: string) =>
-      s
-        .split("\n")
-        .map((l) => l.trim())
-        .filter(Boolean);
-
     onSubmit({
       title,
       photo: photo || undefined,
@@ -54,9 +51,7 @@ export function RecipeForm({ initial, onSubmit, onCancel }: RecipeFormProps) {
       seasonings: splitLines(seasonings),
       tags,
       episode,
-      source: sourceUrl
-        ? { url: sourceUrl, title: sourceTitle, arrangement: sourceArrangement }
-        : undefined,
+      source,
     });
   };
 
@@ -89,22 +84,46 @@ export function RecipeForm({ initial, onSubmit, onCancel }: RecipeFormProps) {
 
       <TagSelect selected={tags} onChange={setTags} />
 
-      {/* 材料・手順 */}
-      <Textarea
-        label="材料（1行に1つ）"
-        placeholder={"じゃがいも 3個\n豚バラ 200g\n醤油 大さじ2"}
-        value={ingredients}
-        onChange={(e) => setIngredients(e.target.value)}
-        rows={5}
+      {/* 参考レシピ（元レシピの転記 + アレンジ記録） */}
+      <SourceRecipeForm
+        value={source}
+        onChange={setSource}
+        currentIngredients={ingredients}
+        currentSteps={steps}
+        onCopyIngredients={setIngredients}
+        onCopySteps={setSteps}
       />
 
-      <Textarea
-        label="作り方（1行に1ステップ）"
-        placeholder={"じゃがいもは大きめに切る\n豚肉を炒める\n調味料を入れて煮る"}
-        value={steps}
-        onChange={(e) => setSteps(e.target.value)}
-        rows={5}
-      />
+      {/* うちの材料・手順 */}
+      <div className="space-y-1">
+        <Textarea
+          label="うちの材料（1行に1つ）"
+          placeholder={"じゃがいも 3個\n豚バラ 200g\n醤油 大さじ2"}
+          value={ingredients}
+          onChange={(e) => setIngredients(e.target.value)}
+          rows={5}
+        />
+        {source && source.ingredients.length > 0 && (
+          <p className="text-xs text-shiso">
+            元レシピから変えた部分を書き換えましょう
+          </p>
+        )}
+      </div>
+
+      <div className="space-y-1">
+        <Textarea
+          label="うちの作り方（1行に1ステップ）"
+          placeholder={"じゃがいもは大きめに切る\n豚肉を炒める\n調味料を入れて煮る"}
+          value={steps}
+          onChange={(e) => setSteps(e.target.value)}
+          rows={5}
+        />
+        {source && source.steps.length > 0 && (
+          <p className="text-xs text-shiso">
+            元レシピから変えた部分を書き換えましょう
+          </p>
+        )}
+      </div>
 
       {/* こだわり */}
       <Textarea
@@ -131,32 +150,6 @@ export function RecipeForm({ initial, onSubmit, onCancel }: RecipeFormProps) {
         onChange={(e) => setEpisode(e.target.value)}
         rows={3}
       />
-
-      {/* 参考レシピ */}
-      <fieldset className="space-y-3 border border-kinako-dark rounded-lg p-4">
-        <legend className="text-sm font-medium text-nori px-2">
-          🔗 参考にしたレシピ（任意）
-        </legend>
-        <Input
-          label="レシピURL"
-          placeholder="https://cookpad.com/recipe/..."
-          value={sourceUrl}
-          onChange={(e) => setSourceUrl(e.target.value)}
-        />
-        <Input
-          label="レシピ名"
-          placeholder="基本の肉じゃが"
-          value={sourceTitle}
-          onChange={(e) => setSourceTitle(e.target.value)}
-        />
-        <Textarea
-          label="どうアレンジした？"
-          placeholder="砂糖を半分に減らして、代わりにみりんを多めに"
-          value={sourceArrangement}
-          onChange={(e) => setSourceArrangement(e.target.value)}
-          rows={2}
-        />
-      </fieldset>
 
       {/* ボタン */}
       <div className="flex gap-3 pt-2">

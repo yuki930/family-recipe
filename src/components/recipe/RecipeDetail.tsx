@@ -122,22 +122,53 @@ export function RecipeDetail({ recipe }: RecipeDetailProps) {
         {/* 参考レシピ */}
         {recipe.source && (
           <Section title="参考にしたレシピ" icon="🔗">
-            <div className="bg-kinako-light rounded-lg p-3 space-y-2">
-              <p className="text-sm font-medium text-nori">
-                {recipe.source.title}
-              </p>
-              <p className="text-xs text-kitsune break-all">
-                {recipe.source.url}
-              </p>
-              {recipe.source.arrangement && (
-                <div className="pt-2 border-t border-kinako-dark">
-                  <p className="text-xs font-medium text-shiso mb-1">
-                    アレンジした点
+            <div className="space-y-3">
+              {/* 基本情報 */}
+              <div className="bg-kinako-light rounded-lg p-3 space-y-1">
+                <p className="text-sm font-medium text-nori">
+                  {recipe.source.title}
+                </p>
+                {recipe.source.url && (
+                  <p className="text-xs text-kitsune break-all">
+                    {recipe.source.url}
                   </p>
-                  <p className="text-sm text-nori-light">
+                )}
+                {recipe.source.memo && (
+                  <p className="text-xs text-goma mt-1 whitespace-pre-wrap">
+                    {recipe.source.memo}
+                  </p>
+                )}
+              </div>
+
+              {/* アレンジ内容 */}
+              {recipe.source.arrangement && (
+                <div className="bg-shiso/8 border border-shiso/20 rounded-lg p-3">
+                  <p className="text-xs font-bold text-shiso mb-1.5">
+                    うちのアレンジ
+                  </p>
+                  <p className="text-sm text-nori-light whitespace-pre-wrap">
                     {recipe.source.arrangement}
                   </p>
                 </div>
+              )}
+
+              {/* 元レシピの材料 vs うちの材料 */}
+              {recipe.source.ingredients.length > 0 && (
+                <SourceComparison
+                  label="材料"
+                  sourceItems={recipe.source.ingredients}
+                  myItems={recipe.ingredients}
+                />
+              )}
+
+              {/* 元レシピの手順 vs うちの手順 */}
+              {recipe.source.steps.length > 0 && (
+                <SourceComparison
+                  label="作り方"
+                  sourceItems={recipe.source.steps}
+                  myItems={recipe.steps}
+                  numbered
+                />
               )}
             </div>
           </Section>
@@ -164,5 +195,78 @@ function Section({
       </h2>
       {children}
     </section>
+  );
+}
+
+function SourceComparison({
+  label,
+  sourceItems,
+  myItems,
+  numbered,
+}: {
+  label: string;
+  sourceItems: string[];
+  myItems: string[];
+  numbered?: boolean;
+}) {
+  const mySet = new Set(myItems.map((s) => s.trim()));
+  const sourceSet = new Set(sourceItems.map((s) => s.trim()));
+
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+      {/* 元レシピ */}
+      <div className="bg-kinako-light/60 rounded-lg p-3">
+        <p className="text-xs font-bold text-goma mb-2">元レシピの{label}</p>
+        <ul className="space-y-1">
+          {sourceItems.map((item, i) => {
+            const changed = !mySet.has(item.trim());
+            return (
+              <li
+                key={i}
+                className={`text-xs flex items-start gap-1.5 ${
+                  changed ? "text-goma line-through" : "text-nori-light"
+                }`}
+              >
+                <span className="flex-shrink-0 mt-0.5 text-goma/50">
+                  {numbered ? `${i + 1}.` : "•"}
+                </span>
+                {item}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+
+      {/* うちバージョン */}
+      <div className="bg-kitsune/8 border border-kitsune/20 rounded-lg p-3">
+        <p className="text-xs font-bold text-kitsune-dark mb-2">
+          うちの{label}
+        </p>
+        <ul className="space-y-1">
+          {myItems.map((item, i) => {
+            const isNew = !sourceSet.has(item.trim());
+            return (
+              <li
+                key={i}
+                className={`text-xs flex items-start gap-1.5 ${
+                  isNew
+                    ? "text-kitsune-dark font-medium"
+                    : "text-nori-light"
+                }`}
+              >
+                <span
+                  className={`flex-shrink-0 mt-0.5 ${
+                    isNew ? "text-kitsune" : "text-kitsune/40"
+                  }`}
+                >
+                  {numbered ? `${i + 1}.` : isNew ? "+" : "•"}
+                </span>
+                {item}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </div>
   );
 }

@@ -11,10 +11,11 @@ import { TagSelect } from "@/components/ui/TagSelect";
 import { RecipeCard } from "@/components/recipe/RecipeCard";
 import { RecipeDetail } from "@/components/recipe/RecipeDetail";
 import { RecipeForm } from "@/components/recipe/RecipeForm";
+import { SourceRecipeForm } from "@/components/recipe/SourceRecipeForm";
 import { Header } from "@/components/layout/Header";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { EmptyState } from "@/components/layout/EmptyState";
-import { RecipeTag, RecipeStatus } from "@/types/recipe";
+import { RecipeTag, RecipeStatus, SourceRecipe } from "@/types/recipe";
 
 // サンプルレシピデータ
 const sampleRecipes: Recipe[] = [
@@ -62,16 +63,50 @@ const sampleRecipes: Recipe[] = [
     id: "2",
     title: "パパの特製カレー",
     memo: "市販ルーにちょい足し。りんごとチョコが隠し味。",
-    ingredients: [],
-    steps: [],
-    tips: ["仕上げに板チョコをひとかけ"],
+    ingredients: [
+      "じゃがいも 2個",
+      "にんじん 1本",
+      "玉ねぎ 2個（元より多め）",
+      "豚バラ 250g",
+      "カレールー（ジャワカレー中辛）1/2箱",
+      "りんご 1/2個（すりおろし）",
+      "板チョコ ひとかけ",
+      "水 600ml",
+    ],
+    steps: [
+      "野菜を一口大に切る",
+      "豚バラを炒める",
+      "玉ねぎが飴色になるまでじっくり炒める",
+      "残りの野菜を加えて炒める",
+      "水を加えて煮込む",
+      "ルーを入れて溶かす",
+      "すりおろしりんごを入れて10分煮る",
+      "最後にチョコをひとかけ入れて溶かす",
+    ],
+    tips: ["仕上げに板チョコをひとかけ", "玉ねぎは飴色まで炒めるのがパパ流"],
     seasonings: [],
     tags: ["staple"],
     status: "memo",
     source: {
       url: "https://example.com/curry",
       title: "基本のカレーレシピ",
-      arrangement: "ルーはジャワカレー中辛。りんご半分すりおろし、仕上げにチョコひとかけ追加。",
+      ingredients: [
+        "じゃがいも 2個",
+        "にんじん 1本",
+        "玉ねぎ 1個",
+        "牛肉 200g",
+        "カレールー 1/2箱",
+        "水 600ml",
+      ],
+      steps: [
+        "野菜を一口大に切る",
+        "牛肉を炒める",
+        "野菜を加えて炒める",
+        "水を加えて煮込む",
+        "ルーを入れて溶かし、とろみがつくまで煮る",
+      ],
+      memo: "中辛がおすすめ",
+      arrangement: "ルーはジャワカレー中辛。りんご半分すりおろし、仕上げにチョコひとかけ追加。牛肉→豚バラに変更。",
     },
     episode: "",
     createdAt: "2024-02-20",
@@ -97,6 +132,16 @@ export default function CatalogPage() {
   const [photo, setPhoto] = useState("");
   const [selectedTags, setSelectedTags] = useState<RecipeTag[]>(["grandma", "staple"]);
   const [activeTab, setActiveTab] = useState<"recipes" | "seasonings" | "family">("recipes");
+  const [demoSource, setDemoSource] = useState<SourceRecipe | undefined>({
+    url: "https://example.com/nikujaga",
+    title: "基本の肉じゃがレシピ",
+    ingredients: ["じゃがいも 2個", "牛肉 150g", "醤油 大さじ2", "砂糖 大さじ1"],
+    steps: ["野菜を切る", "肉を炒める", "調味料を入れて煮込む"],
+    memo: "落とし蓋をすると味がよく染みます",
+    arrangement: "牛肉→豚バラに変更。砂糖を1.5倍に。じゃがいもは男爵を指定。",
+  });
+  const [demoIngredients, setDemoIngredients] = useState("");
+  const [demoSteps, setDemoSteps] = useState("");
 
   return (
     <div className="min-h-screen bg-kinako-light pb-20">
@@ -242,10 +287,35 @@ export default function CatalogPage() {
         </section>
 
         {/* ============================== */}
+        {/* レシピ詳細（参考元あり — 差分比較） */}
+        {/* ============================== */}
+        <section>
+          <SectionTitle>レシピ詳細（参考元あり — 元レシピとの比較）</SectionTitle>
+          <RecipeDetail recipe={sampleRecipes[1]} />
+        </section>
+
+        {/* ============================== */}
+        {/* 参考レシピフォーム（単体） */}
+        {/* ============================== */}
+        <section>
+          <SectionTitle>参考レシピフォーム（元レシピ転記 + アレンジ記録）</SectionTitle>
+          <div className="max-w-2xl mx-auto">
+            <SourceRecipeForm
+              value={demoSource}
+              onChange={setDemoSource}
+              currentIngredients={demoIngredients}
+              currentSteps={demoSteps}
+              onCopyIngredients={setDemoIngredients}
+              onCopySteps={setDemoSteps}
+            />
+          </div>
+        </section>
+
+        {/* ============================== */}
         {/* レシピフォーム */}
         {/* ============================== */}
         <section>
-          <SectionTitle>レシピフォーム</SectionTitle>
+          <SectionTitle>レシピフォーム（参考レシピ組み込み済み）</SectionTitle>
           <RecipeForm
             onSubmit={(data) => console.log("submit:", data)}
             onCancel={() => console.log("cancel")}

@@ -34,6 +34,13 @@ export const RECIPE_STATUS_ICONS: Record<RecipeStatus, string> = {
 export interface SourceRecipe {
   url: string;
   title: string;
+  /** 元レシピの材料（転記） */
+  ingredients: string[];
+  /** 元レシピの手順（転記） */
+  steps: string[];
+  /** 元レシピの自由メモ（転記） */
+  memo: string;
+  /** アレンジ内容の自由記述 */
   arrangement: string;
 }
 
