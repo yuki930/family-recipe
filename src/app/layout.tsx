@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { ThemeProviderWrapper } from "@/components/ThemeProviderWrapper";
 
 export const metadata: Metadata = {
   title: "味つぎ — 家族の味を、手間なく残す",
@@ -13,7 +14,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
-      <body>{children}</body>
+      <body>
+        <ThemeProviderWrapper>{children}</ThemeProviderWrapper>
+      </body>
     </html>
   );
 }

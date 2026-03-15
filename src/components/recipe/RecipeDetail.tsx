@@ -1,3 +1,4 @@
+import { Card, CardBody, Heading, Text, Badge as KazeBadge, List, ListItem } from "@kaze-ds/react";
 import { Recipe } from "@/types/recipe";
 import { Badge } from "@/components/ui/Badge";
 
@@ -7,99 +8,82 @@ interface RecipeDetailProps {
 
 export function RecipeDetail({ recipe }: RecipeDetailProps) {
   return (
-    <div className="bg-shiroan rounded-2xl overflow-hidden shadow-sm max-w-2xl mx-auto">
+    <Card style={{ maxWidth: "42rem", margin: "0 auto", overflow: "hidden" }}>
       {/* ヒーロー画像 */}
       {recipe.photo ? (
-        <div className="aspect-video relative overflow-hidden">
+        <div className="card__media" style={{ aspectRatio: "16/9", overflow: "hidden" }}>
           <img
             src={recipe.photo}
             alt={recipe.title}
-            className="w-full h-full object-cover"
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
           />
         </div>
       ) : (
-        <div className="aspect-video bg-kinako flex items-center justify-center text-6xl">
+        <div className="flex items-center justify-center" style={{ aspectRatio: "16/9", background: "var(--color-bg-secondary)", fontSize: "3.5rem" }}>
           🍳
         </div>
       )}
 
-      <div className="p-5 space-y-5">
+      <CardBody className="flex flex-col gap-5">
         {/* ヘッダー */}
         <div>
-          <div className="flex items-center gap-2 mb-2">
+          <div className="flex flex-wrap items-center gap-2 mb-2">
             <Badge variant="status" status={recipe.status} />
             {recipe.tags.map((tag) => (
               <Badge key={tag} tag={tag} />
             ))}
           </div>
-          <h1 className="text-2xl font-bold text-nori">{recipe.title}</h1>
+          <Heading level={2}>{recipe.title}</Heading>
         </div>
 
         {/* メモ */}
         {recipe.memo && (
-          <div className="bg-kinako-light rounded-lg p-4">
-            <p className="text-nori-light text-sm leading-relaxed whitespace-pre-wrap">
+          <div className="card card--fill p-4">
+            <Text className="leading-relaxed" style={{ whiteSpace: "pre-wrap" }}>
               {recipe.memo}
-            </p>
+            </Text>
           </div>
         )}
 
         {/* エピソード */}
         {recipe.episode && (
           <Section title="思い出・エピソード" icon="💭">
-            <p className="text-nori-light text-sm leading-relaxed whitespace-pre-wrap">
+            <Text className="leading-relaxed" style={{ whiteSpace: "pre-wrap" }}>
               {recipe.episode}
-            </p>
+            </Text>
           </Section>
         )}
 
         {/* 材料 */}
         {recipe.ingredients.length > 0 && (
           <Section title="材料" icon="🥕">
-            <ul className="space-y-1">
+            <List variant="disc">
               {recipe.ingredients.map((item, i) => (
-                <li
-                  key={i}
-                  className="text-sm text-nori-light flex items-start gap-2"
-                >
-                  <span className="text-kitsune mt-0.5">•</span>
-                  {item}
-                </li>
+                <ListItem key={i}>{item}</ListItem>
               ))}
-            </ul>
+            </List>
           </Section>
         )}
 
         {/* 手順 */}
         {recipe.steps.length > 0 && (
           <Section title="作り方" icon="👩‍🍳">
-            <ol className="space-y-3">
+            <List variant="decimal">
               {recipe.steps.map((step, i) => (
-                <li key={i} className="flex gap-3 text-sm text-nori-light">
-                  <span className="flex-shrink-0 w-6 h-6 bg-kitsune/15 text-kitsune-dark rounded-full flex items-center justify-center text-xs font-bold">
-                    {i + 1}
-                  </span>
-                  <span className="leading-relaxed pt-0.5">{step}</span>
-                </li>
+                <ListItem key={i}>{step}</ListItem>
               ))}
-            </ol>
+            </List>
           </Section>
         )}
 
         {/* こだわり・コツ */}
         {recipe.tips.length > 0 && (
           <Section title="こだわり・コツ" icon="✨">
-            <ul className="space-y-1">
+            <List variant="disc">
               {recipe.tips.map((tip, i) => (
-                <li
-                  key={i}
-                  className="text-sm text-nori-light flex items-start gap-2"
-                >
-                  <span className="text-shiso mt-0.5">◆</span>
-                  {tip}
-                </li>
+                <ListItem key={i}>{tip}</ListItem>
               ))}
-            </ul>
+            </List>
           </Section>
         )}
 
@@ -108,12 +92,7 @@ export function RecipeDetail({ recipe }: RecipeDetailProps) {
           <Section title="使う調味料" icon="🧂">
             <div className="flex flex-wrap gap-2">
               {recipe.seasonings.map((s, i) => (
-                <span
-                  key={i}
-                  className="inline-flex px-3 py-1 bg-kinako rounded-full text-sm text-nori-light"
-                >
-                  {s}
-                </span>
+                <KazeBadge key={i}>{s}</KazeBadge>
               ))}
             </div>
           </Section>
@@ -122,33 +101,31 @@ export function RecipeDetail({ recipe }: RecipeDetailProps) {
         {/* 参考レシピ */}
         {recipe.source && (
           <Section title="参考にしたレシピ" icon="🔗">
-            <div className="space-y-3">
+            <div className="flex flex-col gap-3">
               {/* 基本情報 */}
-              <div className="bg-kinako-light rounded-lg p-3 space-y-1">
-                <p className="text-sm font-medium text-nori">
-                  {recipe.source.title}
-                </p>
+              <div className="card card--fill p-3 flex flex-col gap-1">
+                <Text className="font-semibold">{recipe.source.title}</Text>
                 {recipe.source.url && (
-                  <p className="text-xs text-kitsune break-all">
+                  <Text className="text--xs text--primary" style={{ wordBreak: "break-all" }}>
                     {recipe.source.url}
-                  </p>
+                  </Text>
                 )}
                 {recipe.source.memo && (
-                  <p className="text-xs text-goma mt-1 whitespace-pre-wrap">
+                  <Text className="text--xs text--muted mt-1" style={{ whiteSpace: "pre-wrap" }}>
                     {recipe.source.memo}
-                  </p>
+                  </Text>
                 )}
               </div>
 
               {/* アレンジ内容 */}
               {recipe.source.arrangement && (
-                <div className="bg-shiso/8 border border-shiso/20 rounded-lg p-3">
-                  <p className="text-xs font-bold text-shiso mb-1.5">
+                <div className="card p-3" style={{ background: "rgba(123, 75, 148, 0.06)", border: "1px solid rgba(123, 75, 148, 0.2)" }}>
+                  <Text className="text--xs font-bold mb-1" style={{ color: "var(--color-shiso)" }}>
                     うちのアレンジ
-                  </p>
-                  <p className="text-sm text-nori-light whitespace-pre-wrap">
+                  </Text>
+                  <Text className="text--sm leading-relaxed" style={{ whiteSpace: "pre-wrap" }}>
                     {recipe.source.arrangement}
-                  </p>
+                  </Text>
                 </div>
               )}
 
@@ -173,8 +150,8 @@ export function RecipeDetail({ recipe }: RecipeDetailProps) {
             </div>
           </Section>
         )}
-      </div>
-    </div>
+      </CardBody>
+    </Card>
   );
 }
 
@@ -189,10 +166,10 @@ function Section({
 }) {
   return (
     <section>
-      <h2 className="flex items-center gap-2 text-base font-bold text-nori mb-3">
+      <Heading level={4} className="flex items-center gap-2 mb-3">
         <span>{icon}</span>
         {title}
-      </h2>
+      </Heading>
       {children}
     </section>
   );
@@ -213,21 +190,23 @@ function SourceComparison({
   const sourceSet = new Set(sourceItems.map((s) => s.trim()));
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+    <div className="grid gap-2" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}>
       {/* 元レシピ */}
-      <div className="bg-kinako-light/60 rounded-lg p-3">
-        <p className="text-xs font-bold text-goma mb-2">元レシピの{label}</p>
-        <ul className="space-y-1">
+      <div className="card card--fill p-3">
+        <Text className="text--xs font-bold text--muted mb-2">元レシピの{label}</Text>
+        <ul className="flex flex-col gap-1">
           {sourceItems.map((item, i) => {
             const changed = !mySet.has(item.trim());
             return (
               <li
                 key={i}
-                className={`text-xs flex items-start gap-1.5 ${
-                  changed ? "text-goma line-through" : "text-nori-light"
-                }`}
+                className="text--xs flex items-start gap-1"
+                style={{
+                  color: changed ? "var(--color-fg-muted)" : "var(--color-fg-secondary)",
+                  textDecoration: changed ? "line-through" : "none",
+                }}
               >
-                <span className="flex-shrink-0 mt-0.5 text-goma/50">
+                <span style={{ flexShrink: 0, opacity: 0.5 }}>
                   {numbered ? `${i + 1}.` : "•"}
                 </span>
                 {item}
@@ -238,27 +217,23 @@ function SourceComparison({
       </div>
 
       {/* うちバージョン */}
-      <div className="bg-kitsune/8 border border-kitsune/20 rounded-lg p-3">
-        <p className="text-xs font-bold text-kitsune-dark mb-2">
+      <div className="card p-3" style={{ background: "rgba(212, 135, 78, 0.06)", border: "1px solid rgba(212, 135, 78, 0.2)" }}>
+        <Text className="text--xs font-bold mb-2" style={{ color: "var(--color-kitsune-dark)" }}>
           うちの{label}
-        </p>
-        <ul className="space-y-1">
+        </Text>
+        <ul className="flex flex-col gap-1">
           {myItems.map((item, i) => {
             const isNew = !sourceSet.has(item.trim());
             return (
               <li
                 key={i}
-                className={`text-xs flex items-start gap-1.5 ${
-                  isNew
-                    ? "text-kitsune-dark font-medium"
-                    : "text-nori-light"
-                }`}
+                className="text--xs flex items-start gap-1"
+                style={{
+                  color: isNew ? "var(--color-kitsune-dark)" : "var(--color-fg-secondary)",
+                  fontWeight: isNew ? 500 : 400,
+                }}
               >
-                <span
-                  className={`flex-shrink-0 mt-0.5 ${
-                    isNew ? "text-kitsune" : "text-kitsune/40"
-                  }`}
-                >
+                <span style={{ flexShrink: 0, color: isNew ? "var(--color-kitsune)" : "rgba(212, 135, 78, 0.4)" }}>
                   {numbered ? `${i + 1}.` : isNew ? "+" : "•"}
                 </span>
                 {item}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Card, CardBody, Heading } from "@kaze-ds/react";
 import { Recipe, RecipeTag, SourceRecipe } from "@/types/recipe";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -56,112 +57,113 @@ export function RecipeForm({ initial, onSubmit, onCancel }: RecipeFormProps) {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="bg-shiroan rounded-2xl p-5 shadow-sm max-w-2xl mx-auto space-y-6"
-    >
-      <h2 className="text-xl font-bold text-nori">レシピを記録する</h2>
+    <Card style={{ maxWidth: "42rem", margin: "0 auto" }}>
+      <form onSubmit={handleSubmit}>
+        <CardBody className="flex flex-col gap-5">
+          <Heading level={3}>レシピを記録する</Heading>
 
-      {/* 写真 */}
-      <PhotoUpload photo={photo} onPhotoChange={setPhoto} />
+          {/* 写真 */}
+          <PhotoUpload photo={photo} onPhotoChange={setPhoto} />
 
-      {/* 基本情報 */}
-      <Input
-        label="料理名"
-        placeholder="おばあちゃんの肉じゃが"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        required
-      />
+          {/* 基本情報 */}
+          <Input
+            label="料理名"
+            placeholder="おばあちゃんの肉じゃが"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+          />
 
-      <Textarea
-        label="ひとことメモ"
-        placeholder="じゃがいもは男爵がいい。砂糖多めが好き。"
-        value={memo}
-        onChange={(e) => setMemo(e.target.value)}
-        rows={3}
-      />
+          <Textarea
+            label="ひとことメモ"
+            placeholder="じゃがいもは男爵がいい。砂糖多めが好き。"
+            value={memo}
+            onChange={(e) => setMemo(e.target.value)}
+            rows={3}
+          />
 
-      <TagSelect selected={tags} onChange={setTags} />
+          <TagSelect selected={tags} onChange={setTags} />
 
-      {/* 参考レシピ（元レシピの転記 + アレンジ記録） */}
-      <SourceRecipeForm
-        value={source}
-        onChange={setSource}
-        currentIngredients={ingredients}
-        currentSteps={steps}
-        onCopyIngredients={setIngredients}
-        onCopySteps={setSteps}
-      />
+          {/* 参考レシピ（元レシピの転記 + アレンジ記録） */}
+          <SourceRecipeForm
+            value={source}
+            onChange={setSource}
+            currentIngredients={ingredients}
+            currentSteps={steps}
+            onCopyIngredients={setIngredients}
+            onCopySteps={setSteps}
+          />
 
-      {/* うちの材料・手順 */}
-      <div className="space-y-1">
-        <Textarea
-          label="うちの材料（1行に1つ）"
-          placeholder={"じゃがいも 3個\n豚バラ 200g\n醤油 大さじ2"}
-          value={ingredients}
-          onChange={(e) => setIngredients(e.target.value)}
-          rows={5}
-        />
-        {source && source.ingredients.length > 0 && (
-          <p className="text-xs text-shiso">
-            元レシピから変えた部分を書き換えましょう
-          </p>
-        )}
-      </div>
+          {/* うちの材料・手順 */}
+          <div className="flex flex-col gap-1">
+            <Textarea
+              label="うちの材料（1行に1つ）"
+              placeholder={"じゃがいも 3個\n豚バラ 200g\n醤油 大さじ2"}
+              value={ingredients}
+              onChange={(e) => setIngredients(e.target.value)}
+              rows={5}
+            />
+            {source && source.ingredients.length > 0 && (
+              <p className="text--xs" style={{ color: "var(--color-shiso)" }}>
+                元レシピから変えた部分を書き換えましょう
+              </p>
+            )}
+          </div>
 
-      <div className="space-y-1">
-        <Textarea
-          label="うちの作り方（1行に1ステップ）"
-          placeholder={"じゃがいもは大きめに切る\n豚肉を炒める\n調味料を入れて煮る"}
-          value={steps}
-          onChange={(e) => setSteps(e.target.value)}
-          rows={5}
-        />
-        {source && source.steps.length > 0 && (
-          <p className="text-xs text-shiso">
-            元レシピから変えた部分を書き換えましょう
-          </p>
-        )}
-      </div>
+          <div className="flex flex-col gap-1">
+            <Textarea
+              label="うちの作り方（1行に1ステップ）"
+              placeholder={"じゃがいもは大きめに切る\n豚肉を炒める\n調味料を入れて煮る"}
+              value={steps}
+              onChange={(e) => setSteps(e.target.value)}
+              rows={5}
+            />
+            {source && source.steps.length > 0 && (
+              <p className="text--xs" style={{ color: "var(--color-shiso)" }}>
+                元レシピから変えた部分を書き換えましょう
+              </p>
+            )}
+          </div>
 
-      {/* こだわり */}
-      <Textarea
-        label="こだわり・コツ"
-        placeholder={"弱火でじっくり\n最後にバターをひとかけ"}
-        value={tips}
-        onChange={(e) => setTips(e.target.value)}
-        rows={3}
-      />
+          {/* こだわり */}
+          <Textarea
+            label="こだわり・コツ"
+            placeholder={"弱火でじっくり\n最後にバターをひとかけ"}
+            value={tips}
+            onChange={(e) => setTips(e.target.value)}
+            rows={3}
+          />
 
-      <Textarea
-        label="使う調味料（1行に1つ）"
-        placeholder={"キッコーマン特選丸大豆しょうゆ\nみりん"}
-        value={seasonings}
-        onChange={(e) => setSeasonings(e.target.value)}
-        rows={3}
-      />
+          <Textarea
+            label="使う調味料（1行に1つ）"
+            placeholder={"キッコーマン特選丸大豆しょうゆ\nみりん"}
+            value={seasonings}
+            onChange={(e) => setSeasonings(e.target.value)}
+            rows={3}
+          />
 
-      {/* エピソード */}
-      <Textarea
-        label="思い出・エピソード"
-        placeholder="お正月に必ず作る、おばあちゃんの味。"
-        value={episode}
-        onChange={(e) => setEpisode(e.target.value)}
-        rows={3}
-      />
+          {/* エピソード */}
+          <Textarea
+            label="思い出・エピソード"
+            placeholder="お正月に必ず作る、おばあちゃんの味。"
+            value={episode}
+            onChange={(e) => setEpisode(e.target.value)}
+            rows={3}
+          />
 
-      {/* ボタン */}
-      <div className="flex gap-3 pt-2">
-        {onCancel && (
-          <Button type="button" variant="secondary" onClick={onCancel}>
-            キャンセル
-          </Button>
-        )}
-        <Button type="submit" className="flex-1">
-          保存する
-        </Button>
-      </div>
-    </form>
+          {/* ボタン */}
+          <div className="flex gap-3 pt-2">
+            {onCancel && (
+              <Button type="button" variant="secondary" onClick={onCancel}>
+                キャンセル
+              </Button>
+            )}
+            <Button type="submit" style={{ flex: 1 }}>
+              保存する
+            </Button>
+          </div>
+        </CardBody>
+      </form>
+    </Card>
   );
 }

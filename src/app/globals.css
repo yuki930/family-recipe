@@ -1,53 +1,46 @@
-@import "tailwindcss";
+@import "@kaze-ds/react/css/all";
 
-@theme {
-  /* === 味つぎ デザイントークン === */
+/* === 味つぎ アプリ固有のトークン === */
+:root {
+  /* 和の色彩 — 温かみのある和食パレット（Kaze DSトークンに追加） */
+  --color-kitsune: #D4874E;
+  --color-kitsune-light: #E8A872;
+  --color-kitsune-dark: #B56E38;
+  --color-kinako: #F5E6C8;
+  --color-kinako-light: #FBF4E8;
+  --color-kinako-dark: #E8D4A8;
+  --color-nori: #2D4A3E;
+  --color-nori-light: #4A7A68;
+  --color-nori-muted: #6B8F7F;
+  --color-shiso: #7B4B94;
+  --color-shiso-light: #9B6DB4;
+  --color-umeboshi: #C2455A;
+  --color-umeboshi-light: #D4697A;
+  --color-matcha: #5B8C5A;
+  --color-matcha-light: #7AAF79;
+  --color-goma: #8B7355;
 
-  /* 和の色彩 — 温かみのある和食パレット */
-  --color-kitsune: #D4874E;        /* きつね色 — プライマリ */
-  --color-kitsune-light: #E8A872;  /* きつね色・薄 */
-  --color-kitsune-dark: #B56E38;   /* きつね色・濃 */
+  /* Kaze DSのプライマリカラーを味つぎのきつね色にオーバーライド */
+  --color-primary: var(--color-kitsune);
+  --color-primary-fg: #fff;
+  --color-primary-hover: var(--color-kitsune-dark);
 
-  --color-kinako: #F5E6C8;         /* きなこ色 — 背景 */
-  --color-kinako-light: #FBF4E8;   /* きなこ色・薄 */
-  --color-kinako-dark: #E8D4A8;    /* きなこ色・濃 */
+  /* 背景を和の色に */
+  --color-bg: var(--color-kinako-light);
+  --color-bg-secondary: var(--color-kinako);
 
-  --color-nori: #2D4A3E;           /* 海苔色 — テキスト */
-  --color-nori-light: #4A7A68;     /* 海苔色・薄 */
-  --color-nori-muted: #6B8F7F;     /* 海苔色・くすみ */
+  /* ネガティブを梅干し色に */
+  --color-negative: var(--color-umeboshi);
+  --color-negative-fg: var(--color-umeboshi);
+  --color-negative-strong: var(--color-umeboshi);
 
-  --color-shiso: #7B4B94;          /* 紫蘇色 — アクセント */
-  --color-shiso-light: #9B6DB4;    /* 紫蘇色・薄 */
-
-  --color-umeboshi: #C2455A;       /* 梅干し色 — 警告・削除 */
-  --color-umeboshi-light: #D4697A; /* 梅干し色・薄 */
-
-  --color-matcha: #5B8C5A;         /* 抹茶色 — 成功 */
-  --color-matcha-light: #7AAF79;   /* 抹茶色・薄 */
-
-  --color-goma: #8B7355;           /* ごま色 — サブテキスト */
-  --color-shiroan: #FFFFFF;        /* 白あん — 白 */
-
-  /* 角丸 */
-  --radius-sm: 0.375rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
-  --radius-xl: 1rem;
-  --radius-full: 9999px;
-
-  /* フォントサイズ */
-  --font-size-xs: 0.75rem;
-  --font-size-sm: 0.875rem;
-  --font-size-base: 1rem;
-  --font-size-lg: 1.125rem;
-  --font-size-xl: 1.25rem;
-  --font-size-2xl: 1.5rem;
-  --font-size-3xl: 1.875rem;
+  /* ポジティブを抹茶色に */
+  --color-positive: var(--color-matcha);
+  --color-positive-fg: var(--color-matcha);
+  --color-positive-strong: var(--color-matcha);
 }
 
-/* ベーススタイル */
 body {
-  background-color: var(--color-kinako-light);
+  background-color: var(--color-bg);
   color: var(--color-nori);
-  font-family: "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", sans-serif;
 }

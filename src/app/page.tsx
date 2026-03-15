@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Heading, Card, Divider } from "@kaze-ds/react";
 import { Recipe } from "@/types/recipe";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -144,35 +145,29 @@ export default function CatalogPage() {
   const [demoSteps, setDemoSteps] = useState("");
 
   return (
-    <div className="min-h-screen bg-kinako-light pb-20">
+    <div style={{ minHeight: "100vh", paddingBottom: "5rem" }}>
       <Header onAddClick={() => {}} />
 
-      <main className="max-w-4xl mx-auto px-4 py-8 space-y-16">
-        {/* ============================== */}
+      <main style={{ maxWidth: "56rem", margin: "0 auto", padding: "var(--space-6) var(--space-4)" }} className="flex flex-col gap-8">
         {/* カラーパレット */}
-        {/* ============================== */}
-        <section>
-          <SectionTitle>カラーパレット</SectionTitle>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <ColorSwatch name="きつね" color="bg-kitsune" hex="#D4874E" />
-            <ColorSwatch name="きつね・薄" color="bg-kitsune-light" hex="#E8A872" />
-            <ColorSwatch name="きなこ" color="bg-kinako" hex="#F5E6C8" />
-            <ColorSwatch name="きなこ・薄" color="bg-kinako-light" hex="#FBF4E8" />
-            <ColorSwatch name="海苔" color="bg-nori" hex="#2D4A3E" light />
-            <ColorSwatch name="海苔・薄" color="bg-nori-light" hex="#4A7A68" light />
-            <ColorSwatch name="紫蘇" color="bg-shiso" hex="#7B4B94" light />
-            <ColorSwatch name="梅干し" color="bg-umeboshi" hex="#C2455A" light />
-            <ColorSwatch name="抹茶" color="bg-matcha" hex="#5B8C5A" light />
-            <ColorSwatch name="ごま" color="bg-goma" hex="#8B7355" light />
+        <CatalogSection title="カラーパレット">
+          <div className="grid gap-3" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(100px, 1fr))" }}>
+            <ColorSwatch name="きつね" hex="#D4874E" color="var(--color-kitsune)" />
+            <ColorSwatch name="きつね・薄" hex="#E8A872" color="var(--color-kitsune-light)" />
+            <ColorSwatch name="きなこ" hex="#F5E6C8" color="var(--color-kinako)" />
+            <ColorSwatch name="きなこ・薄" hex="#FBF4E8" color="var(--color-kinako-light)" />
+            <ColorSwatch name="海苔" hex="#2D4A3E" color="var(--color-nori)" light />
+            <ColorSwatch name="海苔・薄" hex="#4A7A68" color="var(--color-nori-light)" light />
+            <ColorSwatch name="紫蘇" hex="#7B4B94" color="var(--color-shiso)" light />
+            <ColorSwatch name="梅干し" hex="#C2455A" color="var(--color-umeboshi)" light />
+            <ColorSwatch name="抹茶" hex="#5B8C5A" color="var(--color-matcha)" light />
+            <ColorSwatch name="ごま" hex="#8B7355" color="var(--color-goma)" light />
           </div>
-        </section>
+        </CatalogSection>
 
-        {/* ============================== */}
         {/* ボタン */}
-        {/* ============================== */}
-        <section>
-          <SectionTitle>ボタン</SectionTitle>
-          <div className="space-y-4">
+        <CatalogSection title="ボタン">
+          <div className="flex flex-col gap-4">
             <div className="flex flex-wrap gap-3">
               <Button size="sm">小さい</Button>
               <Button size="md">標準</Button>
@@ -188,14 +183,11 @@ export default function CatalogPage() {
               <Button disabled>無効状態</Button>
             </div>
           </div>
-        </section>
+        </CatalogSection>
 
-        {/* ============================== */}
         {/* 入力フィールド */}
-        {/* ============================== */}
-        <section>
-          <SectionTitle>入力フィールド</SectionTitle>
-          <div className="max-w-md space-y-4">
+        <CatalogSection title="入力フィールド">
+          <div className="flex flex-col gap-4" style={{ maxWidth: "28rem" }}>
             <Input label="料理名" placeholder="おばあちゃんの肉じゃが" />
             <Input
               label="エラー状態"
@@ -208,26 +200,20 @@ export default function CatalogPage() {
               rows={3}
             />
           </div>
-        </section>
+        </CatalogSection>
 
-        {/* ============================== */}
         {/* 写真アップロード */}
-        {/* ============================== */}
-        <section>
-          <SectionTitle>写真アップロード</SectionTitle>
-          <div className="max-w-xs">
+        <CatalogSection title="写真アップロード">
+          <div style={{ maxWidth: "16rem" }}>
             <PhotoUpload photo={photo} onPhotoChange={setPhoto} />
           </div>
-        </section>
+        </CatalogSection>
 
-        {/* ============================== */}
         {/* バッジ */}
-        {/* ============================== */}
-        <section>
-          <SectionTitle>バッジ</SectionTitle>
-          <div className="space-y-4">
+        <CatalogSection title="バッジ">
+          <div className="flex flex-col gap-4">
             <div>
-              <p className="text-sm font-medium text-goma mb-2">ステータス</p>
+              <p className="text--sm font-medium mb-2" style={{ color: "var(--color-fg-muted)" }}>ステータス</p>
               <div className="flex flex-wrap gap-2">
                 {(["photo", "memo", "draft", "complete"] as RecipeStatus[]).map(
                   (s) => (
@@ -237,7 +223,7 @@ export default function CatalogPage() {
               </div>
             </div>
             <div>
-              <p className="text-sm font-medium text-goma mb-2">タグ</p>
+              <p className="text--sm font-medium mb-2" style={{ color: "var(--color-fg-muted)" }}>タグ</p>
               <div className="flex flex-wrap gap-2">
                 {(
                   [
@@ -254,52 +240,37 @@ export default function CatalogPage() {
               </div>
             </div>
           </div>
-        </section>
+        </CatalogSection>
 
-        {/* ============================== */}
         {/* タグ選択 */}
-        {/* ============================== */}
-        <section>
-          <SectionTitle>タグ選択</SectionTitle>
-          <div className="max-w-md">
+        <CatalogSection title="タグ選択">
+          <div style={{ maxWidth: "28rem" }}>
             <TagSelect selected={selectedTags} onChange={setSelectedTags} />
           </div>
-        </section>
+        </CatalogSection>
 
-        {/* ============================== */}
         {/* レシピカード */}
-        {/* ============================== */}
-        <section>
-          <SectionTitle>レシピカード</SectionTitle>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+        <CatalogSection title="レシピカード">
+          <div className="grid gap-4" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))" }}>
             {sampleRecipes.map((recipe) => (
               <RecipeCard key={recipe.id} recipe={recipe} />
             ))}
           </div>
-        </section>
+        </CatalogSection>
 
-        {/* ============================== */}
         {/* レシピ詳細 */}
-        {/* ============================== */}
-        <section>
-          <SectionTitle>レシピ詳細</SectionTitle>
+        <CatalogSection title="レシピ詳細">
           <RecipeDetail recipe={sampleRecipes[0]} />
-        </section>
+        </CatalogSection>
 
-        {/* ============================== */}
         {/* レシピ詳細（参考元あり — 差分比較） */}
-        {/* ============================== */}
-        <section>
-          <SectionTitle>レシピ詳細（参考元あり — 元レシピとの比較）</SectionTitle>
+        <CatalogSection title="レシピ詳細（参考元あり — 元レシピとの比較）">
           <RecipeDetail recipe={sampleRecipes[1]} />
-        </section>
+        </CatalogSection>
 
-        {/* ============================== */}
         {/* 参考レシピフォーム（単体） */}
-        {/* ============================== */}
-        <section>
-          <SectionTitle>参考レシピフォーム（元レシピ転記 + アレンジ記録）</SectionTitle>
-          <div className="max-w-2xl mx-auto">
+        <CatalogSection title="参考レシピフォーム（元レシピ転記 + アレンジ記録）">
+          <div style={{ maxWidth: "42rem", margin: "0 auto" }}>
             <SourceRecipeForm
               value={demoSource}
               onChange={setDemoSource}
@@ -309,42 +280,33 @@ export default function CatalogPage() {
               onCopySteps={setDemoSteps}
             />
           </div>
-        </section>
+        </CatalogSection>
 
-        {/* ============================== */}
         {/* レシピフォーム */}
-        {/* ============================== */}
-        <section>
-          <SectionTitle>レシピフォーム（参考レシピ組み込み済み）</SectionTitle>
+        <CatalogSection title="レシピフォーム（参考レシピ組み込み済み）">
           <RecipeForm
             onSubmit={(data) => console.log("submit:", data)}
             onCancel={() => console.log("cancel")}
           />
-        </section>
+        </CatalogSection>
 
-        {/* ============================== */}
         {/* 空状態 */}
-        {/* ============================== */}
-        <section>
-          <SectionTitle>空状態</SectionTitle>
-          <div className="bg-shiroan rounded-2xl">
+        <CatalogSection title="空状態">
+          <Card>
             <EmptyState
               title="まだレシピがありません"
               description="家族の味を記録してみましょう。写真を撮るだけでOK！"
               action={<Button>最初のレシピを追加</Button>}
             />
-          </div>
-        </section>
+          </Card>
+        </CatalogSection>
 
-        {/* ============================== */}
         {/* ヘッダー（再掲） */}
-        {/* ============================== */}
-        <section>
-          <SectionTitle>ヘッダー</SectionTitle>
-          <div className="border border-kinako-dark rounded-xl overflow-hidden">
+        <CatalogSection title="ヘッダー">
+          <Card style={{ overflow: "hidden" }}>
             <Header onAddClick={() => {}} />
-          </div>
-        </section>
+          </Card>
+        </CatalogSection>
       </main>
 
       <BottomNav active={activeTab} onChange={setActiveTab} />
@@ -354,11 +316,12 @@ export default function CatalogPage() {
 
 /* ヘルパーコンポーネント */
 
-function SectionTitle({ children }: { children: React.ReactNode }) {
+function CatalogSection({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <h2 className="text-lg font-bold text-nori mb-4 pb-2 border-b border-kinako-dark">
+    <section>
+      <Heading level={4} bordered className="mb-4">{title}</Heading>
       {children}
-    </h2>
+    </section>
   );
 }
 
@@ -374,14 +337,17 @@ function ColorSwatch({
   light?: boolean;
 }) {
   return (
-    <div className="text-center">
+    <div style={{ textAlign: "center" }}>
       <div
-        className={`${color} h-16 rounded-lg shadow-sm border border-black/5`}
+        style={{
+          backgroundColor: color,
+          height: "4rem",
+          borderRadius: "var(--radius-md)",
+          border: "1px solid rgba(0,0,0,0.05)",
+        }}
       />
-      <p className={`text-xs mt-1.5 font-medium ${light ? "text-nori" : "text-nori"}`}>
-        {name}
-      </p>
-      <p className="text-xs text-goma">{hex}</p>
+      <p className="text--xs font-medium mt-1">{name}</p>
+      <p className="text--xs text--muted">{hex}</p>
     </div>
   );
 }

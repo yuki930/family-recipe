@@ -1,3 +1,5 @@
+import { EmptyState as KazeEmptyState } from "@kaze-ds/react";
+
 interface EmptyStateProps {
   icon?: string;
   title: string;
@@ -12,11 +14,11 @@ export function EmptyState({
   action,
 }: EmptyStateProps) {
   return (
-    <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
-      <span className="text-5xl mb-4">{icon}</span>
-      <h3 className="text-lg font-bold text-nori mb-1">{title}</h3>
-      <p className="text-sm text-goma mb-6 max-w-xs">{description}</p>
-      {action}
-    </div>
+    <KazeEmptyState
+      icon={<span style={{ fontSize: "3rem" }}>{icon}</span>}
+      title={title}
+      description={description}
+      actions={action}
+    />
   );
 }
