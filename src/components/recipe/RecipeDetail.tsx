@@ -57,7 +57,7 @@ export function RecipeDetail({ recipe }: RecipeDetailProps) {
         {/* 材料 */}
         {recipe.ingredients.length > 0 && (
           <Section title="材料" icon="🥕">
-            <List variant="disc">
+            <List marker="disc">
               {recipe.ingredients.map((item, i) => (
                 <ListItem key={i}>{item}</ListItem>
               ))}
@@ -68,7 +68,7 @@ export function RecipeDetail({ recipe }: RecipeDetailProps) {
         {/* 手順 */}
         {recipe.steps.length > 0 && (
           <Section title="作り方" icon="👩‍🍳">
-            <List variant="decimal">
+            <List marker="decimal">
               {recipe.steps.map((step, i) => (
                 <ListItem key={i}>{step}</ListItem>
               ))}
@@ -79,7 +79,7 @@ export function RecipeDetail({ recipe }: RecipeDetailProps) {
         {/* こだわり・コツ */}
         {recipe.tips.length > 0 && (
           <Section title="こだわり・コツ" icon="✨">
-            <List variant="disc">
+            <List marker="disc">
               {recipe.tips.map((tip, i) => (
                 <ListItem key={i}>{tip}</ListItem>
               ))}
