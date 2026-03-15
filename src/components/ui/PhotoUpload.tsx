@@ -32,25 +32,21 @@ export function PhotoUpload({
     <button
       type="button"
       onClick={() => inputRef.current?.click()}
-      className={`
-        relative overflow-hidden rounded-xl border-2 border-dashed border-kinako-dark
-        bg-kinako hover:bg-kinako-dark transition-colors duration-150
-        flex items-center justify-center cursor-pointer
-        aspect-[4/3] w-full
-        ${photo ? "border-solid border-transparent" : ""}
-        ${className}
-      `}
+      className={`card relative overflow-hidden flex items-center justify-center cursor-pointer transition ${
+        photo ? "" : "border border-dashed"
+      } ${className}`}
+      style={{ aspectRatio: "4/3", width: "100%" }}
     >
       {photo ? (
         <img
           src={photo}
           alt="料理の写真"
-          className="absolute inset-0 w-full h-full object-cover"
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
         />
       ) : (
-        <div className="flex flex-col items-center gap-2 text-goma">
+        <div className="flex flex-col items-center gap-2" style={{ color: "var(--color-fg-muted)" }}>
           <svg
-            className="w-10 h-10"
+            className="icon icon--xl"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -67,7 +63,7 @@ export function PhotoUpload({
               d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z"
             />
           </svg>
-          <span className="text-sm">写真を追加</span>
+          <span className="text--sm">写真を追加</span>
         </div>
       )}
       <input

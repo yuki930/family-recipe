@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@kaze-ds/react";
 import { RecipeTag, RECIPE_TAG_LABELS } from "@/types/recipe";
 
 interface TagSelectProps {
@@ -35,29 +36,21 @@ export function TagSelect({ selected, onChange }: TagSelectProps) {
   };
 
   return (
-    <div className="flex flex-col gap-1.5">
-      <span className="text-sm font-medium text-nori">タグ</span>
+    <div className="flex flex-col gap-2">
+      <span className="label">タグ</span>
       <div className="flex flex-wrap gap-2">
         {allTags.map((tag) => {
           const isSelected = selected.includes(tag);
           return (
-            <button
+            <Button
               key={tag}
               type="button"
+              variant={isSelected ? "primary" : "outline"}
+              size="sm"
               onClick={() => toggle(tag)}
-              className={`
-                inline-flex items-center gap-1 px-3 py-1.5
-                text-sm rounded-full border transition-colors duration-150
-                cursor-pointer
-                ${
-                  isSelected
-                    ? "bg-kitsune/15 border-kitsune text-kitsune-dark font-medium"
-                    : "bg-shiroan border-kinako-dark text-goma hover:bg-kinako"
-                }
-              `}
             >
               {tagEmojis[tag]} {RECIPE_TAG_LABELS[tag]}
-            </button>
+            </Button>
           );
         })}
       </div>

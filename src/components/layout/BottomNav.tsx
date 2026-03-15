@@ -15,24 +15,46 @@ const tabs: { id: NavTab; label: string; icon: string }[] = [
 
 export function BottomNav({ active, onChange }: BottomNavProps) {
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-shiroan/90 backdrop-blur-sm border-t border-kinako-dark z-50">
-      <div className="max-w-4xl mx-auto flex">
+    <nav
+      className="fixed flex"
+      style={{
+        bottom: 0,
+        left: 0,
+        right: 0,
+        zIndex: "var(--z-sticky)",
+        background: "var(--color-bg-secondary)",
+        borderTop: "1px solid var(--color-border)",
+        backdropFilter: "blur(8px)",
+      }}
+    >
+      <div className="flex" style={{ maxWidth: "56rem", margin: "0 auto", width: "100%" }}>
         {tabs.map((tab) => {
           const isActive = active === tab.id;
           return (
             <button
               key={tab.id}
               onClick={() => onChange(tab.id)}
-              className={`
-                flex-1 flex flex-col items-center gap-0.5 py-2
-                text-xs transition-colors cursor-pointer
-                ${isActive ? "text-kitsune-dark font-medium" : "text-goma"}
-              `}
+              className="flex flex-col items-center gap-1 py-2 cursor-pointer transition"
+              style={{
+                flex: 1,
+                fontSize: "var(--font-size-xs)",
+                color: isActive ? "var(--color-kitsune-dark)" : "var(--color-fg-muted)",
+                fontWeight: isActive ? 500 : 400,
+                background: "none",
+                border: "none",
+              }}
             >
-              <span className="text-lg">{tab.icon}</span>
+              <span style={{ fontSize: "1.125rem" }}>{tab.icon}</span>
               <span>{tab.label}</span>
               {isActive && (
-                <span className="w-1 h-1 rounded-full bg-kitsune" />
+                <span
+                  style={{
+                    width: "4px",
+                    height: "4px",
+                    borderRadius: "var(--radius-full)",
+                    background: "var(--color-kitsune)",
+                  }}
+                />
               )}
             </button>
           );

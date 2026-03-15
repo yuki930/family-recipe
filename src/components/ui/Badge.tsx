@@ -1,6 +1,5 @@
+import { Badge as KazeBadge } from "@kaze-ds/react";
 import { RecipeTag, RecipeStatus, RECIPE_TAG_LABELS, RECIPE_STATUS_LABELS, RECIPE_STATUS_ICONS } from "@/types/recipe";
-
-type BadgeVariant = "tag" | "status";
 
 interface TagBadgeProps {
   variant?: "tag";
@@ -14,48 +13,36 @@ interface StatusBadgeProps {
 
 type BadgeProps = TagBadgeProps | StatusBadgeProps;
 
-const tagColors: Record<RecipeTag, string> = {
-  grandma: "bg-shiso/15 text-shiso",
-  staple: "bg-kitsune/15 text-kitsune-dark",
-  quick: "bg-matcha/15 text-matcha",
-  special: "bg-umeboshi/15 text-umeboshi",
-  sweets: "bg-kitsune-light/30 text-kitsune-dark",
-  preserved: "bg-goma/15 text-goma",
+const tagVariantMap: Record<RecipeTag, "default" | "positive" | "negative" | "warning" | "info"> = {
+  grandma: "info",
+  staple: "warning",
+  quick: "positive",
+  special: "negative",
+  sweets: "warning",
+  preserved: "default",
 };
 
-const statusColors: Record<RecipeStatus, string> = {
-  photo: "bg-nori-muted/15 text-nori-muted",
-  memo: "bg-kitsune/15 text-kitsune-dark",
-  draft: "bg-shiso/15 text-shiso",
-  complete: "bg-matcha/15 text-matcha",
+const statusVariantMap: Record<RecipeStatus, "default" | "positive" | "negative" | "warning" | "info"> = {
+  photo: "default",
+  memo: "warning",
+  draft: "info",
+  complete: "positive",
 };
 
 export function Badge(props: BadgeProps) {
   if (props.variant === "status") {
     const { status } = props;
     return (
-      <span
-        className={`
-          inline-flex items-center gap-1 px-2 py-0.5
-          text-xs font-medium rounded-full
-          ${statusColors[status]}
-        `}
-      >
+      <KazeBadge variant={statusVariantMap[status]}>
         {RECIPE_STATUS_ICONS[status]} {RECIPE_STATUS_LABELS[status]}
-      </span>
+      </KazeBadge>
     );
   }
 
   const { tag } = props;
   return (
-    <span
-      className={`
-        inline-flex items-center px-2 py-0.5
-        text-xs font-medium rounded-full
-        ${tagColors[tag]}
-      `}
-    >
+    <KazeBadge variant={tagVariantMap[tag]}>
       {RECIPE_TAG_LABELS[tag]}
-    </span>
+    </KazeBadge>
   );
 }
