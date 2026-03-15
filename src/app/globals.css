@@ -1,4 +1,7 @@
-@import "@kaze-ds/react/css/all";
+@import "@kaze-ds/react/css/tokens";
+@import "@kaze-ds/react/css/reset";
+@import "@kaze-ds/react/css/components";
+@import "@kaze-ds/react/css/utilities";
 
 /* === 味つぎ アプリ固有のトークン === */
 :root {
@@ -43,4 +46,9 @@
 body {
   background-color: var(--color-bg);
   color: var(--color-nori);
+}
+
+/* Kaze DS に基本の .grid がないため追加 */
+.grid {
+  display: grid;
 }
